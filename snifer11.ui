@@ -38,8 +38,8 @@
   <widget class="QTextEdit" name="textmax">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>60</y>
+     <x>590</x>
+     <y>10</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -48,8 +48,8 @@
   <widget class="QTextEdit" name="textmin">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>140</y>
+     <x>590</x>
+     <y>40</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -58,8 +58,8 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>110</y>
+     <x>560</x>
+     <y>40</y>
      <width>31</width>
      <height>22</height>
     </rect>
@@ -71,8 +71,8 @@
   <widget class="QLineEdit" name="lineEdit_3">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>30</y>
+     <x>560</x>
+     <y>10</y>
      <width>31</width>
      <height>22</height>
     </rect>
@@ -85,7 +85,7 @@
    <property name="geometry">
     <rect>
      <x>750</x>
-     <y>80</y>
+     <y>110</y>
      <width>351</width>
      <height>61</height>
     </rect>
@@ -98,7 +98,7 @@
    <property name="geometry">
     <rect>
      <x>1100</x>
-     <y>80</y>
+     <y>110</y>
      <width>104</width>
      <height>61</height>
     </rect>
@@ -112,6 +112,29 @@
      <width>621</width>
      <height>431</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textkol">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>70</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_2">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>70</y>
+     <width>31</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kol</string>
    </property>
   </widget>
  </widget>

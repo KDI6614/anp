@@ -57,7 +57,7 @@ public:
 class PacketStream {
 public:
     pcap_hdr_s fHeader;
-    QVector <Deny> packets;
+    QList <Deny> packets;
 };
 
 #endif // SNIFER11_H
