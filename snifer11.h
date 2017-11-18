@@ -18,8 +18,6 @@ public:
 private slots:
     void on_analize_clicked();
 
-    void on_findpocket_clicked();
-
     void on_pushButton_clicked();
 
 private:
@@ -51,6 +49,7 @@ class Deny
 public:
     pcaprec_hdr_s pHeader;
     unsigned char data [10000];
+
 
 };
 
