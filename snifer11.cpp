@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QString>
-
+#include <QTableWidget>
 
 snifer11::snifer11(QWidget *parent) :
     QWidget(parent),
@@ -23,6 +23,7 @@ snifer11::~snifer11()
 Deny ph;
 PacketStream fh;
 QString fName;
+QTableWidgetItem *itm;
 int l;
 void snifer11::on_analize_clicked()
 {
@@ -37,20 +38,6 @@ void snifer11::on_analize_clicked()
         qDebug() << "Error while openning file";
         return ;
     }
-
-  /*  QString dName = QFileDialog::getOpenFileName(0,"Open File:","","TXT files (*.txt)");
-    if (dName=="")
-        return ;
-    QFile fileout(dName);
-    if (!fileout.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "Error while openning file";
-        return ;
-    }
-*/
-
-
-
 
 
     filein.read((char*)&fh.fHeader, 24);
@@ -70,187 +57,168 @@ void snifer11::on_analize_clicked()
    ui->textEdit->append("\n");
 
 
-
+   ui->tableWidget->setColumnCount(10);
+   ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Время 1" << "Время 2" << "Incl len" << "Orig len"<<"Конечный МАС"<<"Исходный МАС"<<"Источник"<<"Получатель"<<"Порт иточника"<<"Порт приемника");
 
      int min = 999999, max = 0;
 
-    for (int i=24; i<=filein.size();)
+    for (int i=24; i<filein.size();)
     {
      filein.read((char*)&ph.pHeader, 16);
 
 
-     filein.read((char*)&ph.data, ph.pHeader.incl_len);
+     ph.data = new unsigned char[ph.pHeader.incl_len];
+
+
+
+
+     filein.read((char*)ph.data, ph.pHeader.incl_len);
+
+
      fh.packets.append(ph);
 
 
 
-     if((i!=24) and (fh.packets[l].pHeader.incl_len < min))
+     if(fh.packets[l].pHeader.incl_len < min)
         min=fh.packets[l].pHeader.incl_len;
 
 
-    if((i!=24) and (fh.packets[l].pHeader.incl_len > max))
+    if (fh.packets[l].pHeader.incl_len > max)
         max=fh.packets[l].pHeader.incl_len;
 
 
+    ui->tableWidget->setRowCount(l+1);
 
+    ui->tableWidget->setItem(l,0, itm = new QTableWidgetItem(tr("%1").arg(fh.packets[l].pHeader.ts_sec)));
+    ui->tableWidget->setItem(l,1, itm = new QTableWidgetItem(tr("%1").arg(fh.packets[l].pHeader.ts_usec)));
+    ui->tableWidget->setItem(l,2, itm = new QTableWidgetItem(tr("%1").arg(fh.packets[l].pHeader.incl_len)));
+    ui->tableWidget->setItem(l,3, itm = new QTableWidgetItem(tr("%1").arg(fh.packets[l].pHeader.orig_len)));
 
-
-     //вывод пакетов текст едит
-    ui->textEdit->append("\n");
-    ui->textEdit->append("ЗАГОЛОВОК ПАКЕТА: " + QByteArray::number(l+1));
-    ui->textEdit->append("Дата и время, когда этот пакет был захвачен - " + QByteArray::number(fh.packets[l].pHeader.ts_sec));
-    ui->textEdit->append("Время в микросекундах, когда этот пакет был захвачен - " + QByteArray::number(fh.packets[l].pHeader.ts_usec));
-    ui->textEdit->append("Количество байтов пакета, сохраненных в файле - " + QByteArray::number(fh.packets[l].pHeader.incl_len));
-    ui->textEdit->append("Фактическая длина пакета - " + QByteArray::number(fh.packets[l].pHeader.orig_len));
-
-
-
-
-    ui->textEdit->append("ПАКЕТНЫЕ ДАННЫЕ: \n");
-
-    for (int t=0; t<fh.packets[l].pHeader.incl_len; t++)
-    {
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 16)+" ");
-     }
-
-
-    ui->textEdit->append("ПРОТОКОЛ ETHERNET: ");
-
-    ui->textEdit->append("Конечный MAC адрес: ");
-
-
-
+     QString macp = "";
     for (int t=0; t<6; t++)
     {
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 16)+" ");
-     }
 
 
-    ui->textEdit->append("Исходный МАС-адрес: ");
+        QString l1 = QString::number(fh.packets[l].data[t], 10);
+        if ((l1.toInt()>=0) and (l1.toInt()<16))
+        {
+        macp = macp + "0" + QString::number(fh.packets[l].data[t], 16).toUpper();
+        if (t!=5)
+            macp = macp + ":";
+        }
+        else
+        {
+        macp = macp + QString::number(fh.packets[l].data[t], 16).toUpper();
+        if (t!=5)
+            macp = macp + ":";
+        }
 
-    for (int t=6; t<12; t++)
-    {
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 16)+" ");
-     }
+    }
+   ui->tableWidget->setItem(l,4, itm = new QTableWidgetItem);
+   itm->setText(macp);
 
 
-    ui->textEdit->append("Длина/Тип: ");
-
-    for (int t=12; t<14; t++)
-    {
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 16)+" ");
-     }
 
 
+   macp = "";
+  for (int t=6; t<12; t++)
+  {
+      QString l1 = QString::number(fh.packets[l].data[t], 10);
+      if ((l1.toInt()>=0) and (l1.toInt()<16))
+      {
+      macp = macp + "0" + QString::number(fh.packets[l].data[t], 16).toUpper();
+      if (t!=11)
+          macp = macp + ":";
+      }
+      else
+      {
+      macp = macp + QString::number(fh.packets[l].data[t], 16).toUpper();
+      if (t!=11)
+          macp = macp + ":";
+      }
+
+  }
+
+ ui->tableWidget->setItem(l,5, itm = new QTableWidgetItem);
+ itm->setText(macp);
+
+
+ macp = "";
      QString l1 = QString :: number(fh.packets[l].data[12], 16);
      QString l2 = QString :: number (fh.packets[l].data[13], 16);
 
      if((l1.toInt()==8) and (l2.toInt()==0))
      {
-       ui->textEdit->append("ПРОТОКОЛ IP: ");
-
     QString l1 = QString :: number(fh.packets[l].data[14], 16);
-
     int k1 = l1.toInt();
     k1 = k1 / 10;
     int k2 = (l1.toInt() -  k1*10)*4;
 
-    ui->textEdit->append("Версия: ");
-    ui->textEdit->insertPlainText(QString::number(k1));
-    ui->textEdit->append("Количество байт: ");
-    ui->textEdit->insertPlainText(QString::number(k2));
+   for (int t=6+k2; t<10+k2; t++)
+   {
+       macp = macp + QString::number(fh.packets[l].data[t], 10).toUpper();
+       if (t!=9+k2)
+           macp = macp + ".";
+       }
+
+   ui->tableWidget->setItem(l,6, itm = new QTableWidgetItem);
+   itm->setText(macp);
+
+  macp = "";
+   for (int t=10+k2; t<14+k2; t++)
+   {
+       macp = macp + QString::number(fh.packets[l].data[t], 10).toUpper();
+       if (t!=13+k2)
+           macp = macp + ".";
+       }
+
+  ui->tableWidget->setItem(l,7, itm = new QTableWidgetItem);
+  itm->setText(macp);
 
 
-    ui->textEdit->append("Источник: ");
-    for (int t=6+k2; t<10+k2;t++)
+  k1 = (QString::number(fh.packets[l].data[3+k2],16)).toInt();
 
+    if ((k1==6) or (k1==11))
     {
+    l1 = QString::number(fh.packets[l].data[14+k2],16) + QString::number(fh.packets[l].data[15+k2],16);
+    ui->tableWidget->setItem(l,8,itm = new QTableWidgetItem);
+    itm->setText(QString :: number (l1.toInt(0,16),10));
 
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 10));
-     if (t!=9+k2)
-      ui->textEdit->insertPlainText(".");
-     }
-
-
-    ui->textEdit->append("Получатель: ");
-
-    for (int t=10+k2; t<14+k2;t++)
-
-    {
-
-     ui->textEdit->insertPlainText(QString::number(fh.packets[l].data[t], 10));
-     if (t!=13+k2)
-      ui->textEdit->insertPlainText(".");
-     }
-
-    k1 = (QString::number(fh.packets[l].data[3+k2],16)).toInt();
-    if (k1==6)
-       {
-     ui->textEdit->append("ПРОТОКОЛ TCP: ");
-     ui->textEdit->append("Порт источника: ");
-
-     l1 = QString::number(fh.packets[l].data[14+k2],16) + QString::number(fh.packets[l].data[15+k2],16);
-     ui->textEdit->insertPlainText(QString :: number (l1.toInt(0,16), 10));
-
-
-     ui->textEdit->append("Порт приемника: ");
-
-     l1 = QString::number(fh.packets[l].data[16+k2],16) + QString::number(fh.packets[l].data[17+k2],16);
-     ui->textEdit->insertPlainText(QString :: number (l1.toInt(0,16), 10));
-
-
-    }
-    else
-    if (k1==11)
-    {
-        ui->textEdit->append("ПРОТОКОЛ UDP: ");
-        ui->textEdit->append("Порт источника: ");
-
-        l1 = QString::number(fh.packets[l].data[14+k2],16) + QString::number(fh.packets[l].data[15+k2],16);
-        ui->textEdit->insertPlainText(QString :: number (l1.toInt(0,16), 10));
-
-
-        ui->textEdit->append("Порт приемника: ");
-
-        l1 = QString::number(fh.packets[l].data[16+k2],16) + QString::number(fh.packets[l].data[17+k2],16);
-        ui->textEdit->insertPlainText(QString :: number (l1.toInt(0,16), 10));
-
-    }
-    else
-         ui->textEdit->append("Другой протокол");
-
-        }
-
-     else
-         ui->textEdit->append("Другой протокол");
-
-
-
-
-
-
-
-
-
-
-    l=l+1;
-
-    i=16+i+ph.pHeader.orig_len;
+    l1 = QString::number(fh.packets[l].data[16+k2],16) + QString::number(fh.packets[l].data[17+k2],16);
+    ui->tableWidget->setItem(l,9,itm = new QTableWidgetItem);
+    itm->setText(QString :: number (l1.toInt(0,16),10));
 
 }
+    else
+    {
+        ui->tableWidget->setItem(l, 8 , itm = new QTableWidgetItem);
+        itm->setText("НЕ TCP, НЕ UDP");
+        ui->tableWidget->setItem(l, 9 , itm = new QTableWidgetItem);
+        itm->setText("НЕ TCP, НЕ UDP");
+    }
 
+}
+   else
+     {
+     ui->tableWidget->setItem(l, 6 , itm = new QTableWidgetItem);
+     itm->setText("НЕ IP");
+     ui->tableWidget->setItem(l, 7 , itm = new QTableWidgetItem);
+     itm->setText("НЕ IP");
+     ui->tableWidget->setItem(l, 8 , itm = new QTableWidgetItem);
+     itm->setText("НЕ TCP, НЕ UDP");
+     ui->tableWidget->setItem(l, 9 , itm = new QTableWidgetItem);
+     itm->setText("НЕ TCP, НЕ UDP");
+     }
 
+    l=l+1;
+    i=16+i+ph.pHeader.incl_len;
 
-
-
+}
 
     ui->textkol->setText(QByteArray::number(l));
     ui->textmin->setText(QByteArray::number(min));
     ui->textmax->setText(QByteArray::number(max));
     filein.close();
-
-
-
 
 }
 
@@ -396,7 +364,5 @@ void snifer11::on_pushButton_clicked()
         }
       else
        ui->textpock->setText("Takogo paketa net");
-
-
 
 }

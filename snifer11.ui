@@ -6,40 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1206</width>
-    <height>690</height>
+    <width>1776</width>
+    <height>1007</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Analize Pcap</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>541</width>
-     <height>611</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPushButton" name="analize">
-      <property name="text">
-       <string>Analize Pcap</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QTextEdit" name="textEdit"/>
-    </item>
-   </layout>
-  </widget>
   <widget class="QTextEdit" name="textmax">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>10</y>
+     <x>1600</x>
+     <y>400</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -48,8 +26,8 @@
   <widget class="QTextEdit" name="textmin">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>40</y>
+     <x>1600</x>
+     <y>430</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -58,8 +36,8 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>40</y>
+     <x>1570</x>
+     <y>430</y>
      <width>31</width>
      <height>22</height>
     </rect>
@@ -71,8 +49,8 @@
   <widget class="QLineEdit" name="lineEdit_3">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>10</y>
+     <x>1570</x>
+     <y>400</y>
      <width>31</width>
      <height>22</height>
     </rect>
@@ -84,8 +62,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>750</x>
-     <y>110</y>
+     <x>1320</x>
+     <y>490</y>
      <width>351</width>
      <height>61</height>
     </rect>
@@ -97,9 +75,9 @@
   <widget class="QTextEdit" name="textone">
    <property name="geometry">
     <rect>
-     <x>1100</x>
-     <y>110</y>
-     <width>104</width>
+     <x>1670</x>
+     <y>490</y>
+     <width>101</width>
      <height>61</height>
     </rect>
    </property>
@@ -107,9 +85,9 @@
   <widget class="QTextEdit" name="textpock">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>180</y>
-     <width>621</width>
+     <x>1320</x>
+     <y>550</y>
+     <width>451</width>
      <height>431</height>
     </rect>
    </property>
@@ -117,8 +95,8 @@
   <widget class="QTextEdit" name="textkol">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>70</y>
+     <x>1600</x>
+     <y>460</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -127,14 +105,47 @@
   <widget class="QLineEdit" name="lineEdit_2">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>70</y>
+     <x>1570</x>
+     <y>460</y>
      <width>31</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
     <string>Kol</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>41</y>
+     <width>1301</width>
+     <height>941</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="analize">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>539</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Analize Pcap</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>1320</x>
+     <y>40</y>
+     <width>451</width>
+     <height>361</height>
+    </rect>
    </property>
   </widget>
  </widget>

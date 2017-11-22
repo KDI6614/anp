@@ -48,15 +48,15 @@ class Deny
 {
 public:
     pcaprec_hdr_s pHeader;
-    unsigned char data [10000];
+    unsigned char *data;
 
 
-};
+} ;
 
 class PacketStream {
 public:
     pcap_hdr_s fHeader;
     QList <Deny> packets;
-};
+} ;
 
 #endif // SNIFER11_H
